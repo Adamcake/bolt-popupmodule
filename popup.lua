@@ -5,18 +5,20 @@ return {
     local text = ""
     local lastx, lasty, lastax, lastay
     local anytext = false
+    local letter
+    local xleft
     for i = startindex, event:vertexcount(), event:verticesperimage() do
       local ax, ay, aw, ah, _, _ = event:vertexatlasdetails(i)
       local x, y = event:vertexxy(i)
       if aw == 6 and ah == 2 then goto continue end -- some kind of nbsp that comes up in player names
       if ah ~= 30 then break end
       if lastx and math.abs(x - lastx) < 2 and math.abs(y - lasty) < 2 and ax == lastax and ay == lastay then goto continue end
-      local letter = this.popupmessagechars[event:texturedata(ax, ay + 10, aw * 4)]
+      letter = this.popupmessagechars[event:texturedata(ax, ay + 10, aw * 4)]
       if type(letter) == "table" then
         letter = letter[event:texturedata(ax, ay + 22, aw * 4)]
       end
       if not letter then break end
-      local xleft, _ = event:vertexxy(i + 2)
+      xleft = event:vertexxy(i + 2)
       if anytext and ((xleft ~= lastx) or (y ~= lasty)) then
         text = text .. " "
       end
